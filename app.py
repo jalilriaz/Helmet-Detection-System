@@ -48,6 +48,14 @@ AVAILABLE_MODELS = {k: v for k, v in AVAILABLE_MODELS.items() if os.path.exists(
 if not AVAILABLE_MODELS:
     raise FileNotFoundError("No model weights found. Ensure 'best.pt' or 'yolov11nbest.pt' is in the project folder.")
 
+if not os.path.exists("best.pt"):
+    print("\n" + "="*75)
+    print("ℹ️  NOTICE FOR EVALUATOR / EXAMINER:")
+    print("   'best.pt' (50 MB) was excluded from the VULMS upload to satisfy the 25 MB limit.")
+    print("   The application is operating in YOLOv11 fallback mode.")
+    print("   For full accuracy, download 'best.pt' from the Google Drive link in README_SUBMISSION.txt")
+    print("="*75 + "\n")
+
 # Model instances cache
 LOADED_MODELS = {}
 MODEL_LOCK = threading.Lock()
@@ -529,6 +537,13 @@ def build_interface():
             <span><i class="dot red"></i>No Helmet (Violation)</span>
             <span><i class="dot gray"></i>Pedestrian (Suppressed / No Alert)</span>
         </div>''')
+
+        if not os.path.exists("best.pt"):
+            gr.HTML('''<div style="background-color: #fef3c7; color: #92400e; padding: 12px 18px; border-radius: 10px; margin-bottom: 16px; border: 1px solid #fde68a; font-size: 14px;">
+                <strong>⚠️ Notice for Evaluator:</strong> The primary model weights (<code>best.pt</code>, 50 MB) were excluded from the VULMS upload package to comply with the 25 MB file limit.
+                The system is currently running in fallback mode with <code>yolov11nbest.pt</code>.
+                To test with full accuracy, please download <code>best.pt</code> from the Google Drive link provided in <code>README_SUBMISSION.txt</code> and place it in the project folder.
+            </div>''')
 
         with gr.Tabs():
             # ----------------- TAB 1: PHOTO CHECK -----------------
